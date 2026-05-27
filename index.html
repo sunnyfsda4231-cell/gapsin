@@ -1,0 +1,1038 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>갑신정변 - 교생 김찬결</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+    :root {
+      --bg-color: #F5F0C5;
+      --text-color: #2C2621;
+      --accent-color: #4A5759;
+      --accent-hover: #3E4B4D;
+      --paper-bg: #ffffff;
+    }
+
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow: hidden;
+    }
+
+    #presentation {
+      position: relative; width: 100%; height: 100%;
+    }
+
+    .slide {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0; visibility: hidden; transition: opacity 0.5s ease-in-out;
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+      padding: 80px 40px 40px 40px; box-sizing: border-box;
+      background-color: var(--bg-color);
+      overflow-y: auto;
+    }
+    /* 스크롤 여유 공간을 50vh 패딩 대신 가상 요소로 추가하여 내부 요소 찌그러짐 방지 */
+    .slide::after {
+      content: '';
+      display: block;
+      height: 50vh;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .slide.active {
+      opacity: 1; visibility: visible;
+    }
+
+    /* Typography */
+    h1, h2, h3 { font-weight: 900; margin-bottom: 20px; flex-shrink: 0; }
+    h1 { font-size: 3.5rem; letter-spacing: -1.5px; text-align: center; line-height: 1.4; }
+    h2 { font-size: 2.8rem; margin-bottom: 25px; }
+    .subtitle { font-size: 1.5rem; color: #5C4A3D; margin-bottom: 15px; flex-shrink: 0; }
+
+    /* Slide 1 Specific */
+    #slide1 {
+      background: radial-gradient(circle at center, #F5F0C5 0%, #e2ddb0 100%);
+    }
+    #slide1::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M20 20 Q 100 100 180 20 T 180 180 Q 100 100 20 180 Z" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="2"/></svg>');
+      background-size: 400px 400px;
+      pointer-events: none;
+    }
+    .author-stamp {
+      position: absolute; bottom: 50px; right: 60px;
+      font-family: 'Gowun Dodum', serif; font-size: 2rem;
+      border-bottom: 3px solid #8F6A52; padding-bottom: 5px;
+    }
+
+    /* Slide 2: Newspaper Grid */
+    .newspaper-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      width: 80%; max-width: 1000px; flex-shrink: 0;
+      counter-reset: news-counter;
+    }
+    .toc-list {
+      display: flex; flex-direction: column; gap: 15px;
+      width: 70%; max-width: 800px; flex-shrink: 0;
+      counter-reset: news-counter;
+    }
+    .news-item {
+      background: #FFFFFF; border: 2px solid #D9C8A9;
+      padding: 30px 20px; border-radius: 12px; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif KR', serif; font-size: 1.6rem; text-align: center;
+      cursor: pointer; position: relative; overflow: hidden;
+      line-height: 1.4;
+      color: #2C2621;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .news-item:hover {
+      background: #FAF6E0; border-color: #8F6A52; transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .news-item::before {
+      content: counter(news-counter); counter-increment: news-counter;
+      position: absolute; top: 10px; left: 15px; font-size: 1.3rem; color: #8F6A52; font-weight: bold;
+    }
+
+    /* Slide 3: Video */
+    #slide3 { transition: background-color 0.8s ease; }
+    #slide3.dimmed { background-color: #050505; }
+    #slide3.dimmed h2 { opacity: 0; transition: opacity 0.5s; }
+    /* flex-shrink: 0 추가하여 슬라이드 공간 부족시에도 영상이 찌그러지지 않도록 보호 */
+    .video-container { width: 85%; max-width: 1100px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.6); flex-shrink: 0; }
+    video { width: 100%; display: block; background: #000; }
+
+    .worksheet {
+      background: var(--paper-bg); color: #222; padding: 25px 40px; border-radius: 8px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4); font-size: 1.5rem; line-height: 2.2;
+      font-family: 'Noto Serif KR', serif; margin-top: 20px; width: 85%; max-width: 1100px;
+      position: relative; text-align: center; flex-shrink: 0;
+    }
+    
+    /* FIX FOR BLANK TEXT CLIPPING & ALIGNMENT */
+    .blank {
+      display: inline-block; min-width: 120px; border-bottom: 2px solid #5C4A3D;
+      margin: 0 8px; cursor: pointer; position: relative; vertical-align: text-bottom;
+      padding-bottom: 2px;
+      background: rgba(143, 106, 82, 0.1); 
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .blank:hover {
+      background: rgba(143, 106, 82, 0.25);
+    }
+    .blank .answer-text {
+      opacity: 0; font-family: 'Noto Sans KR', sans-serif; font-size: 1em;
+      font-weight: bold; transform: translateX(-50%) scale(1.5);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: absolute; left: 50%; bottom: 2px; pointer-events: none; text-align: center;
+      line-height: 1; z-index: 20; white-space: nowrap;
+    }
+    .blank.revealed .answer-text { opacity: 1; transform: translateX(-50%) scale(1); }
+
+    /* Slide 6: Drag and Drop */
+    .dnd-container {
+      display: flex; flex-direction: column; gap: 20px; width: 95%; max-width: 1200px; margin-top: 10px; flex-shrink: 0;
+    }
+    .dnd-source {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px;
+      background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;
+      min-height: 100px; border: 2px dashed rgba(255,255,255,0.2);
+    }
+    .dnd-zones {
+      display: flex; gap: 15px; width: 100%;
+    }
+    .dnd-zone {
+      flex: 1;
+      background: var(--paper-bg); border-radius: 10px; display: flex; flex-direction: column;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3); min-height: 250px; overflow: hidden;
+      border: 3px solid transparent; transition: border-color 0.2s;
+    }
+    .zone-content {
+      flex: 1; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 80px;
+    }
+    .dnd-item {
+      background: white; color: #2C2621; padding: 10px 15px; border-radius: 6px;
+      font-size: 1.05rem; font-family: 'Noto Serif KR', serif; cursor: grab;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 6px solid #4A5759;
+      touch-action: none; user-select: none; line-height: 1.4; font-weight: bold;
+    }
+    .dnd-item:active { cursor: grabbing; }
+    .dnd-item.invisible { opacity: 0; pointer-events: none; }
+    .dragging-clone {
+      box-shadow: 0 20px 25px rgba(0,0,0,0.4); pointer-events: none; opacity: 0.95;
+      transform: scale(1.02); margin: 0 !important; z-index: 9999;
+    }
+
+    /* Slide 8 Mindmap */
+    .mindmap { display: flex; align-items: center; gap: 15px; font-size: 1.6rem; font-weight: bold; flex-wrap: wrap; justify-content: center; flex-shrink: 0; }
+    .node { background: rgba(0,0,0,0.03); padding: 20px 30px; border-radius: 50px; border: 2px solid #4A5759; box-shadow: 0 5px 10px rgba(0,0,0,0.1); text-align: center;}
+    .arrow { font-size: 2.5rem; }
+
+    /* Slide 9 Quiz Options */
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .dnd-container { display: flex; flex-direction: column; gap: 20px; width: 95%; max-width: 1200px; margin-top: 10px; flex-shrink: 0; }
+    .dnd-source { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; min-height: 100px; border: 2px dashed rgba(255,255,255,0.2); }
+    .dnd-zones { display: flex; gap: 15px; width: 100%; }
+    .dnd-zone { flex: 1; background: var(--paper-bg); border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 10px 20px rgba(0,0,0,0.3); min-height: 250px; overflow: hidden; border: 3px solid transparent; transition: border-color 0.2s; }
+    .zone-content { flex: 1; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 80px; }
+    .dnd-item { width: 320px; max-width: 320px; min-height: 60px; height: auto; flex-shrink: 0; box-sizing: border-box; background: white; color: #2C2621; padding: 10px 15px; border-radius: 6px; font-size: 1.05rem; font-family: 'Noto Serif KR', serif; cursor: grab; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 6px solid #4A5759; touch-action: none; user-select: none; line-height: 1.4; font-weight: bold; }
+    @keyframes burn {
+      0% { transform: scale(1) translateY(0); opacity: 0.8; }
+      50% { transform: scale(1.5) translateY(-10px); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 0.8; }
+    }
+    
+    /* Quiz & Summary */
+    .option { background: #FFFFFF; border: 2px solid #D9C8A9; padding: 18px; border-radius: 8px; font-size: 1.4rem; cursor: pointer; transition: all 0.3s; color: #2C2621; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+    .option:hover { background: #FAF6E0; border-color: #8F6A52; transform: translateX(5px); }
+    /* Controls: Both Left & Right side have both Prev & Next */
+    .controls-left, .controls-right {
+      position: fixed; bottom: 20px; z-index: 100;
+      display: flex; gap: 8px;
+    }
+    .controls-left { left: 20px; }
+    .controls-right { right: 20px; }
+
+    .controls-left button, .controls-right button {
+      background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); color: #1e293b; 
+      font-size: 0.9rem; 
+      width: 25px; height: 25px; 
+      border-radius: 5px; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+    }
+    .controls-left button:hover, .controls-right button:hover {
+      background: rgba(0,0,0,0.2); transform: scale(1.1);
+    }
+    
+    .instruction-toast {
+      position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.6); color: #ccc; padding: 10px 20px; border-radius: 20px;
+      font-size: 1rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 100;
+    }
+    .instruction-toast.show { opacity: 1; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+    /* Summary Interactive Buttons (Aesthetic) */
+    .summary-btn {
+      background: #FFFFFF; color: #2C2621; border: 2px solid #D9C8A9; padding: 25px 30px; font-size: 1.8rem; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-align: left; position: relative; overflow: hidden;
+    }
+    .summary-btn:hover {
+      background: #FAF6E0; border-transform: translateY(-5px) scale(1.02); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+    .summary-content {
+      font-size: 1.6rem; color: #2C2621; line-height: 1.8; width: 100%;
+    }
+    .summary-content p { margin-bottom: 15px; }
+
+    @media (max-width: 768px) {
+      html { font-size: 14px; }
+      .slide { padding: 40px 20px 20px 20px; height: auto; min-height: 100vh; overflow-y: auto; }
+      .newspaper-grid, .toc-list, .dnd-zones, #slide12 > div { flex-direction: column !important; width: 100% !important; display: flex !important; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 2rem; }
+      #nav-buttons button { font-size: 1rem; padding: 10px 20px; }
+      #dnd-source { gap: 8px; padding: 10px; flex-direction: column; }
+      .dnd-item { width: 100%; max-width: none; font-size: 0.95rem; }
+      #presentation { height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="instruction-toast" id="toast">이전/다음 버튼을 누르거나 빈칸을 직접 클릭해 채워보세요.</div>
+
+  <div id="presentation">
+    <!-- Slide 1: Title -->
+    <div class="slide active" id="slide1" style="justify-content: center; padding: 0;">
+      <div class="subtitle">Ⅲ. 근대 국가 수립의 노력 &gt; 2. 근대 국가 수립을 위한 노력</div>
+      <h1>04. 갑신정변이 일어나고<br>열강의 대립이 커지다</h1>
+      <div class="author-stamp">교생 김찬결</div>
+    </div>
+
+    <!-- Slide 2: Index -->
+    <div class="slide" id="slide2">
+      <h2>오늘의 수업 목차</h2>
+      <div class="toc-list">
+        <div class="news-item" onclick="goToSlide(3, event)">생각 열기</div>
+        <div class="news-item" onclick="goToSlide(6, event)">개화파의 분화</div>
+        <div class="news-item" onclick="goToSlide(7, event)">갑신정변의 전개</div>
+        <div class="news-item" onclick="goToSlide(8, event)">갑신정변의 개혁 방향과 한계</div>
+        <div class="news-item" onclick="goToSlide(9, event)">열강의 대립 격화와 조선의 대응</div>
+        <div class="news-item" onclick="goToSlide(12, event)">학습 정리</div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Review -->
+    <div class="slide" id="slide3">
+      <h2>도입: 생각 열기</h2>
+      
+      <div style="width: 85%; max-width: 1100px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; flex-shrink: 0;">
+        <div class="worksheet" style="margin-top: 0; width: 100%; box-sizing: border-box; padding: 25px 30px; font-size: 1.4rem; text-align: left; line-height: 1.8;">
+          <div style="font-weight: bold; color: #2563eb; margin-bottom: 15px; font-size: 1.5rem;">📝 전시 학습 확인</div>
+          <div style="margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px;">
+            <span style="font-weight: bold; color: #1D1E23;">1.</span>
+            <span style="color: #1D1E23;">19세기 후반 보수적 양반 유생들은 서구 열강의 침략적 접근과 조선 정부의 개항, 개화 정책 추진에 반발하여 <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">위정척사 운동</span></span>을 일으켰다.</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <span style="font-weight: bold; color: #1D1E23;">2.</span>
+            <span style="color: #1D1E23;">1882년, 구식 군대 군인과 도시 하층민이 <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">임오군란</span></span>을 일으켜 일본 공사관을 공격했다.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Intro Video -->
+    <div class="slide" id="slide4">
+      <h2>도입: 생각 열기</h2>
+      <div class="video-container">
+        <video id="intro-video" controls>
+          <source src="video_intro.mp4" type="video/mp4">
+          브라우저가 동영상을 지원하지 않습니다.
+        </video>
+      </div>
+    </div>
+
+    <!-- Slide 5: 학습 목표 -->
+    <div class="slide" id="slide5">
+      <h2>오늘의 학습 목표</h2>
+      <div style="background: #FFFFFF; border: 2px solid #D9C8A9; border-radius: 12px; padding: 40px; width: 85%; max-width: 900px; font-size: 1.8rem; line-height: 2; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); color: #2C2621;">
+        <p style="margin-bottom: 20px;">1. <span style="font-weight: bold;">갑신정변</span>의 전개 과정과 역사적 의의를 설명할 수 있다.</p>
+        <p>2. 갑신정변 이후 <span style="font-weight: bold;">열강의 대립</span>과 조선의 대응 방안을 파악할 수 있다.</p>
+      </div>
+    </div>
+
+    <!-- Slide 6: 개화파 분화 -->
+    <div class="slide" id="slide6">
+      <h2>1. 개화파의 형성과 분화</h2>
+      
+      <!-- Flowchart from Image 1 -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 25px; font-size: 1.1rem; flex-shrink: 0;">
+        <div style="background: #fcd34d; color: #000; padding: 8px 15px; border-radius: 8px; text-align: center; font-weight: bold; width: 250px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+          북학 사상<br><span style="font-size: 1rem; font-weight: normal;">박지원, 홍대용, 박제가, 이덕무</span>
+        </div>
+        <div style="width: 2px; height: 12px; background: #cbd5e1;"></div>
+        <div style="background: #b1cc9b; color: #000; padding: 8px 15px; border-radius: 8px; text-align: center; font-weight: bold; width: 250px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+          통상 수교론<br><span style="font-size: 1rem; font-weight: normal;">박규수, 오경석, 유홍기</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #ef4444; font-weight: bold; width: 250px; position: relative;">
+          <div style="width: 2px; height: 12px; background: #cbd5e1;"></div>
+          <span style="position: absolute; left: 135px; font-size: 0.9rem;">1876년 개항</span>
+        </div>
+        <div style="background: #f87171; color: #fff; padding: 8px 15px; border-radius: 8px; text-align: center; font-weight: bold; width: 250px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+          개화파
+        </div>
+        <div style="width: 2px; height: 12px; background: #cbd5e1;"></div>
+        <div style="width: 400px; height: 2px; background: #cbd5e1;"></div>
+        <div style="display: flex; justify-content: space-between; width: 400px;">
+          <div style="width: 2px; height: 12px; background: #cbd5e1;"></div>
+          <div style="width: 2px; height: 12px; background: #cbd5e1;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 500px; gap: 15px;">
+          <div style="flex: 1; border: 2px solid #A65E44; border-radius: 8px; text-align: center; overflow: hidden; background: rgba(0,0,0,0.03); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="background: #A65E44; color: #FFFFFF; padding: 6px; font-weight: bold;">급진 개화파</div>
+            <div style="padding: 8px; font-size: 1rem; color: #1D1E23;">김옥균, 박영효,<br>홍영식, 서광범</div>
+          </div>
+          <div style="flex: 1; border: 2px solid #556B2F; border-radius: 8px; text-align: center; overflow: hidden; background: rgba(0,0,0,0.03); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="background: #556B2F; color: #FFFFFF; padding: 6px; font-weight: bold;">온건 개화파</div>
+            <div style="padding: 8px; font-size: 1rem; color: #1D1E23;">김윤식, 김홍집,<br>어윤중</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Comparison Table -->
+      <table style="width: 85%; max-width: 900px; margin-bottom: 25px; border-collapse: collapse; text-align: center; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #1D1E23;">
+        <thead>
+          <tr style="background: rgba(0,0,0,0.05);">
+            <th style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: #E5DCC5;">구분</th>
+            <th style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: #556B2F; color: #FFFFFF;">온건 개화파</th>
+            <th style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: #A65E44; color: #FFFFFF;">급진 개화파</th>
+          </tr>
+        </thead>
+        <tbody style="background: rgba(255,255,255,0.4);">
+          <tr>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">핵심 인물</td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1);">김홍집, 김윤식, 어윤중</td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1);">김옥균, 박영효, 홍영식 등</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">개혁 모델</td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); line-height: 2;">청 <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">양무운동</span></span><br></td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); line-height: 2;">일본 <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">메이지 유신</span></span><br></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">외교 및 정치</td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1);">동도서기론<br>청과 우호 관계 유지</td>
+            <td style="padding: 10px; border: 1px solid rgba(0,0,0,0.1);">문명개화론<br>입헌 군주제 실시 목표</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Slide 7: Timeline Map Animation -->
+    <div class="slide" id="slide7" style="justify-content: flex-start; padding-top: 60px;">
+      <h2>3. 갑신정변의 전개 과정과 결과</h2>
+      
+      <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px; flex-shrink: 0;">
+        <button onclick="nextMapStep(event)" style="background: #3b82f6; color: white; border: none; padding: 12px 30px; font-size: 1.3rem; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.2s;">▶ 다음 단계 진행</button>
+      </div>
+
+      <div style="position: relative; width: 100%; max-width: 1300px; height: 55vh; min-height: 450px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        
+        <div style="position: relative; width: 55%; height: 100%; background: rgba(255,255,255,1); border-radius: 12px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 10;">
+          <img src="map_gapsin.png" alt="갑신정변 지도" style="width: 100%; height: 100%; object-fit: contain; pointer-events: none;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+            <polyline id="map-path" fill="none" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="1.5 1.5" points="" />
+          </svg>
+          <div id="map-marker" style="position: absolute; width: 25px; height: 25px; background: #ef4444; border-radius: 50%; top: -50px; left: -50px; transform: translate(-50%, -50%); transition: all 0.8s ease-in-out; box-shadow: 0 0 15px #ef4444, 0 0 5px white inset; display: none; z-index: 10;"></div>
+        </div>
+        
+        <!-- Tooltips will be appended here -->
+        <div id="map-overlay-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20;"></div>
+      </div>
+      
+      <div class="worksheet" id="map-worksheet" style="margin-top: 20px; display: none; padding: 10px 25px; font-size: 1.3rem; width: auto;">
+        갑신정변의 결과: 
+        <span class="blank" onclick="revealBlank(this, event)" style="min-width: 90px;"><span class="answer-text">한성 조약</span></span>(일-조), 
+        <span class="blank" onclick="revealBlank(this, event)" style="min-width: 90px;"><span class="answer-text">톈진 조약</span></span>(청-일)
+      </div>
+    </div>
+
+    <!-- Slide 8: 14개조 드래그앤드롭 -->
+    <div class="slide" id="slide8">
+      <h2>3. 근대 국가의 설계도: 개혁 정강 14개조</h2>
+      <p style="font-size: 1.3rem; margin-bottom: 10px; color: #1D1E23; flex-shrink: 0;">각 정강을 터치(또는 마우스)로 드래그하여 알맞은 개혁 분야로 분류해 보세요.</p>
+      
+      <div class="dnd-container">
+        <!-- Source items -->
+        <div class="dnd-source" id="dnd-source">
+          <div class="dnd-item">1. 잡혀간 흥선 대원군을 곧 돌아오게 하고 청에 조공하는 허례를 폐지한다.</div>
+          <div class="dnd-item">2. 문벌을 폐지하여 인민 평등권을 제정하고 능력에 따라 관리를 임명한다.</div>
+          <div class="dnd-item">3. 지조법을 개혁하여 부정을 막고 백성을 보호하며 재정을 넉넉하게 한다.</div>
+          <div class="dnd-item">9. 혜상공국(보부상 관할 기관)을 혁파한다.</div>
+          <div class="dnd-item">12. 재정은 모두 호조에서 관할하게 하고 그 밖의 재무 관청은 폐지한다.</div>
+          <div class="dnd-item">13. 대신과 참찬은 궁궐 내의 의정소에서 회의하고 국왕에게 아뢰어 정령을 집행한다.</div>
+          <div class="dnd-item">14. 의정부와 6조 외의 불필요한 기관을 없애고, 대신과 참찬이 논의하여 보고한다.</div>
+        </div>
+
+        <!-- Drop zones -->
+        <div class="dnd-zones">
+          <div class="dnd-zone">
+            <h3 style="background: #3b82f6; color: white; margin: 0; padding: 12px; border-radius: 8px 8px 0 0; font-size: 1.4rem; text-align: center;">🏛️ 정치</h3>
+            <div class="zone-content"></div>
+          </div>
+          <div class="dnd-zone">
+            <h3 style="background: #10b981; color: white; margin: 0; padding: 12px; border-radius: 8px 8px 0 0; font-size: 1.4rem; text-align: center;">💰 경제</h3>
+            <div class="zone-content"></div>
+          </div>
+          <div class="dnd-zone">
+            <h3 style="background: #f59e0b; color: white; margin: 0; padding: 12px; border-radius: 8px 8px 0 0; font-size: 1.4rem; text-align: center;">🤝 사회</h3>
+            <div class="zone-content"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="width: 95%; max-width: 1200px; display: flex; gap: 20px; margin-top: 20px;">
+        <div style="flex: 1; background: rgba(59, 130, 246, 0.1); border: 2px solid #3b82f6; border-radius: 8px; padding: 15px;">
+          <h4 style="color: #2563eb; margin-top: 0; margin-bottom: 5px; font-size: 1.5rem;">💡 의의</h4>
+          <p style="font-size: 1.3rem; color: #1D1E23; line-height: 1.5; margin: 0;">자주적 근대 개혁을 위한 최초의 정치개혁운동</p>
+        </div>
+        <div style="flex: 1; background: rgba(239, 68, 68, 0.1); border: 2px solid #ef4444; border-radius: 8px; padding: 15px;">
+          <h4 style="color: #dc2626; margin-top: 0; margin-bottom: 5px; font-size: 1.5rem;">⚠️ 한계</h4>
+          <p style="font-size: 1.3rem; color: #1D1E23; line-height: 1.5; margin: 0;">소수의 지식인이 중심으로 된 위로부터의 개혁<br>민중의 지지를 얻지 못함, 일본의 군사적 지원에 의존</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: 열강의 대립 격화 -->
+    <div class="slide" id="slide9">
+      <h2>4. 열강의 대립 격화</h2>
+      <div style="display: flex; flex-direction: column; align-items: center; width: 85%; max-width: 1000px; gap: 20px;">
+        <div style="background: rgba(255,255,255,1); border-radius: 12px; overflow: hidden; border: 2px solid rgba(0,0,0,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; height: 60vh; display: flex; align-items: center; justify-content: center;">
+          <img src="map_world.png" alt="열강의 대립 지도" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        <p style="font-size: 1.5rem; color: #1D1E23; font-weight: bold;">조선을 둘러싼 청, 일본, 러시아, 영국의 세력 각축전</p>
+      </div>
+    </div>
+
+    <!-- Slide 10: 거문도 사건 -->
+    <div class="slide" id="slide10">
+      <h2>4-1. 열강의 대립 격화: 거문도 사건 (1885)</h2>
+      <div style="display: flex; flex-direction: column; align-items: center; width: 100%; height: 60vh; flex-shrink: 0;">
+        <div style="position: relative; width: 85%; max-width: 1000px; height: 100%; overflow: hidden; border-radius: 12px; border: 2px solid rgba(0,0,0,0.1); background: white;">
+          <img id="geomundo-map" src="map_korea_highres.jpg" style="width: 100%; height: 100%; object-fit: contain; transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);">
+        </div>
+        
+        <div style="display: flex; gap: 20px; margin-top: 25px; align-items: center;">
+           <button onclick="zoomGeomundo(event)" style="background: #ef4444; color: white; border: none; padding: 12px 30px; font-size: 1.3rem; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">🔍 거문도 위치 확대하기</button>
+           <div style="font-size: 1.3rem; color: #1D1E23; font-weight: bold;">
+             영국 함대가 러시아의 남하를 구실로 조선의 거문도를 불법 점령
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: 중립화론 -->
+    <div class="slide" id="slide11">
+      <h2>5. 조선의 대응과 중립화론</h2>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; width: 85%; max-width: 1000px; flex-shrink: 0;">
+        <div style="background: rgba(255,255,255,0.9); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+          <img src="source_neutrality.png" alt="유길준 중립론 사료" style="width: 100%; object-fit: contain;">
+        </div>
+        
+        <div class="worksheet" style="font-size: 1.5rem; line-height: 2.2; text-align: left; width: 100%; margin-top: 0;">
+          • 중립화론 대두: 독일 부들러, <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">유길준</span></span>이 중립화론 주장<br>
+          • 조선 정부의 자강 정책: <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">내무부</span></span> 설치, 각국에 <span class="blank" onclick="revealBlank(this, event)"><span class="answer-text">공사관</span></span> 설립
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: 내가 평가하는 갑신정변 -->
+    <div class="slide" id="slide12">
+      <h2 style="text-align: center; width: 100%; margin-bottom: 25px;">내가 평가하는 갑신정변</h2>
+      <div style="display: flex; gap: 20px; width: 95%; max-width: 1200px; justify-content: space-between;">
+        <!-- 사료 1 -->
+        <div style="flex: 1; background: #FFFFFF; border: 2px solid #D9C8A9; border-radius: 12px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px;">
+          <h3 style="color: #4A5759; margin: 0; font-size: 1.5rem; text-align: center;">[사료 1] 조소앙, &lt;갑신독립당 60주년에 임하야&gt;</h3>
+          <img src="./source1.png" style="width: 100%; max-height: 250px; object-fit: contain; background: #F4EFE6; border: 1px solid #E5DCC5; border-radius: 8px;" alt="사료 1 이미지">
+          <div style="background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; font-size: 1.1rem; color: #2C2621; line-height: 1.6; overflow-y: auto; flex: 1;">
+            (1884년) 갑신년 10월 17일(양력 12월 6일)은 동방 혁명의 개막이자 한국 독립운동의 출발이었다. 이로부터 극동의 국면은 다사다난해졌고, 한국의 혁명은 이로부터 잇달아 일어나게 되었다.<br><br>
+            갑신정변을 일으킨 당(개화당)의 청년 지도자들은 내정의 부패와 외교의 부진, 그리고 국제적으로 불리한 환경을 혁신하기 위하여, 우정국 연회를 이용하여 반독립파(수구파)의 거두들을 제거하였다. 그리고 군사를 옹위하여 대궐로 들어가 새 정부를 조직하고 새 정치의 당당한 깃발을 높이 들었었다. 그러나 '3일 천하'의 피어오르던 꽃(화려함)은 결국 피바다 속에서 소멸되고 말았다. 외국 군대(청나라군)의 강대한 힘을 빌려온 반동파들은 독립당의 선봉부대였던 21명의 장군과 신내각의 우의정(홍영식), 도승지 등을 잔인하게 도살하였다. 독립당의 총지휘자였던 김옥균, 서재필 등은 망명길에 오르는 것으로 막을 내렸다. 우리가 (사건이 일어난 지) 60주년을 회고하며 지난 일을 추념해 보니, 생생하고 활기 넘쳤던 그 혁명적 독립운동의 핏자국에 경의와 사모하는 마음(경모)을 금할 길이 없다. 이는 우리 국토의 혁명 역사상 처음으로 마주한 빛나는 광채였으며, 청년 정치가들이 이뤄낸 전무후무한 쾌거였다.
+          </div>
+        </div>
+        
+        <!-- 사료 2 -->
+        <div style="flex: 1; background: #FFFFFF; border: 2px solid #D9C8A9; border-radius: 12px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px;">
+          <h3 style="color: #A65E44; margin: 0; font-size: 1.5rem; text-align: center;">[사료 2] 박은식, &lt;한국통사&gt;</h3>
+          <img src="./source2.png" style="width: 100%; object-fit: contain; background: #F4EFE6; border: 1px solid #E5DCC5; border-radius: 8px; flex: 1;" alt="사료 2 이미지">
+        </div>
+      </div>
+      <div style="margin-top: 20px; font-size: 1.5rem; font-weight: bold; color: #2C2621; background: #FAF6E0; padding: 15px 30px; border-radius: 50px; border: 2px solid #8F6A52; width: 95%; max-width: 1200px; text-align: center; box-sizing: border-box;">
+        📝 위 두 사료를 바탕으로 갑신정변에 대한 나의 평가를 근거와 함께 써보자.
+      </div>
+    </div>
+
+    <!-- Slide 13: 마인드맵 (학습 정리) -->
+    <div class="slide" id="slide13">
+      <h2>오늘 배운 내용 총정리</h2>
+      <div style="display: flex; gap: 30px; width: 90%; max-width: 1200px; margin-top: 20px; flex-shrink: 0; align-items: stretch;">
+        
+        <!-- Left: TOC Buttons -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+          <button class="summary-btn" onclick="showSummary('summary2', event)">1. 개화파의 분화</button>
+          <button class="summary-btn" onclick="showSummary('summary3', event)">2. 갑신정변의 전개</button>
+          <button class="summary-btn" onclick="showSummary('summary4', event)">3. 갑신정변의 개혁 방향과 한계</button>
+          <button class="summary-btn" onclick="showSummary('summary5', event)">4. 열강의 대립 격화와 조선의 대응</button>
+        </div>
+        
+        <!-- Right: Summary Content -->
+        <div style="flex: 1.5; background: rgba(255,255,255,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+          <div id="summary-default" style="font-size: 1.8rem; color: #1D1E23; text-align: center; line-height: 1.6;">좌측의 키워드 버튼을 클릭하여<br>핵심 내용을 확인하세요!</div>
+          
+          <div id="summary2" class="summary-content" style="display: none;">
+            <h3 style="color: #2563eb; margin-bottom: 25px; font-size: 2.4rem;">개화파의 분화</h3>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>온건 개화파</strong>: 동도서기론, 청의 양무운동 모델 (김윤식, 김홍집)</p>
+            <p style="font-size: 1.6rem; color: #1D1E23;">• <strong>급진 개화파</strong>: 문명 개화론, 일본의 메이지 유신 모델 (김옥균, 박영효)</p>
+          </div>
+          <div id="summary3" class="summary-content" style="display: none;">
+            <h3 style="color: #2563eb; margin-bottom: 25px; font-size: 2.4rem;">갑신정변의 전개</h3>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>우정총국</strong> 개국 축하연을 기회로 정변 ➡ 개화당 정부 수립</p>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>삼일천하</strong>: 청군의 개입으로 3일 만에 실패, 주동자들은 일본 망명</p>
+            <p style="font-size: 1.6rem; color: #1D1E23;">• <strong>결과</strong>: 한성 조약, 톈진 조약 체결</p>
+          </div>
+          <div id="summary4" class="summary-content" style="display: none;">
+            <h3 style="color: #2563eb; margin-bottom: 25px; font-size: 2.4rem;">개혁 방향과 한계</h3>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>의의</strong>: 자주적 근대 개혁을 위한 최초의 정치개혁운동</p>
+            <p style="font-size: 1.6rem; line-height: 1.5; color: #1D1E23;">• <strong>한계</strong>: 소수의 지식인이 중심으로 된 위로부터의 개혁, 민중의 지지를 얻지 못함, 일본의 군사적 지원에 의존</p>
+          </div>
+          <div id="summary5" class="summary-content" style="display: none;">
+            <h3 style="color: #2563eb; margin-bottom: 25px; font-size: 2.4rem;">열강의 대립 격화와 조선의 대응</h3>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>거문도 사건(1885)</strong>: 러시아 남하를 구실로 영국 함대가 거문도 불법 점령</p>
+            <p style="font-size: 1.6rem; margin-bottom: 15px; color: #1D1E23;">• <strong>조선의 대응</strong>: 내무부 설치, 공사관 설립</p>
+            <p style="font-size: 1.6rem; color: #1D1E23;">• <strong>중립화론</strong>: 부들러와 유길준이 한반도의 영세 중립국화를 주장 (실현 안됨)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 14: 퀴즈 -->
+    <div class="slide" id="slide14">
+      <h2 style="text-align: center; width: 100%; margin-bottom: 25px; flex-shrink: 0;">형성 평가</h2>
+      <div class="quiz-container" style="width: 85%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; padding-bottom: 50px; flex-shrink: 0;">
+        
+        <!-- Q1 -->
+        <div class="quiz-item">
+          <div class="question" style="background: #FFFFFF; padding: 15px 20px; border-radius: 8px; border: 2px solid #D9C8A9; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.5rem; font-weight: bold; margin-bottom: 12px; color: #1D1E23;">
+            1. 다음 설명이 맞으면 O표, 틀리면 X표를 하시오.
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 1.3rem; padding-left: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px;">
+              <span>⑴ 온건 개화파는 동도서기론을 주장하였다.</span>
+              <span class="ox-btn" onclick="revealOxAnswer(this, 'O', event)" style="cursor: pointer; background: #4A5759; padding: 5px 20px; border-radius: 50px; font-weight: bold; color: white;">정답 확인</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px;">
+              <span>⑵ 온건 개화파는 입헌 군주제 실시를 목표로 하였다.</span>
+              <span class="ox-btn" onclick="revealOxAnswer(this, 'X', event)" style="cursor: pointer; background: #4A5759; padding: 5px 20px; border-radius: 50px; font-weight: bold; color: white;">정답 확인</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px;">
+              <span>⑶ 급진 개화파는 일본의 메이지 유신을 개혁 모델로 삼았다.</span>
+              <span class="ox-btn" onclick="revealOxAnswer(this, 'O', event)" style="cursor: pointer; background: #4A5759; padding: 5px 20px; border-radius: 50px; font-weight: bold; color: white;">정답 확인</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px;">
+              <span>⑷ 급진 개화파는 청과 우호 관계를 유지해야 한다고 주장하였다.</span>
+              <span class="ox-btn" onclick="revealOxAnswer(this, 'X', event)" style="cursor: pointer; background: #4A5759; padding: 5px 20px; border-radius: 50px; font-weight: bold; color: white;">정답 확인</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-item">
+          <div class="question" style="background: #FFFFFF; padding: 15px 20px; border-radius: 8px; border: 2px solid #D9C8A9; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.5rem; font-weight: bold; margin-bottom: 12px; color: #1D1E23;">
+            2. 밑줄 친 ‘이 조약’을 쓰시오.
+          </div>
+          <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-size: 1.3rem; line-height: 1.7;">
+            <u>이 조약</u>은 갑신정변의 결과 청과 일본 간에 체결된 조약으로, 조선에서 양국의 군대를 철수하되 앞으로 조선에 군대를 보낼 때는 상대국에 미리 알릴 것을 규정하였다.
+            <div style="margin-top: 15px; text-align: right; font-weight: bold;">
+              정답: <span class="blank" onclick="revealBlank(this, event)" style="min-width: 150px; border-bottom-color: #fff;"><span class="answer-text">톈진 조약</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-item">
+          <div class="question" style="background: #FFFFFF; padding: 15px 20px; border-radius: 8px; border: 2px solid #D9C8A9; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.5rem; font-weight: bold; margin-bottom: 12px; color: #1D1E23;">
+            3. 갑신정변 이후 대내외 상황으로 적절하지 않은 것은?
+          </div>
+          <div class="options" id="quiz-options">
+            <div class="option" onclick="handleWrongAnswer(this, event)">① 청의 내정 간섭이 심해졌다.</div>
+            <div class="option" onclick="handleWrongAnswer(this, event)">② 고종이 내무부를 설치하였다.</div>
+            <div class="option" onclick="handleWrongAnswer(this, event)">③ 조러 비밀 협약이 체결되었다.</div>
+            <div class="option" onclick="handleWrongAnswer(this, event)">④ 영국이 거문도를 불법 점령하였다.</div>
+            <div class="option" id="correct-option" onclick="handleCorrectAnswer(event)">⑤ 조청 상민 수륙 무역 장정이 체결되었다.</div>
+          </div>
+          <div class="feedback" id="quiz-feedback" style="display: none;">
+            <strong>정답 ⑤:</strong> 조청 상민 수륙 무역 장정은 임오군란(1882) 직후에 체결되었습니다.
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-item">
+          <div class="question" style="background: #FFFFFF; padding: 15px 20px; border-radius: 8px; border: 2px solid #D9C8A9; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.5rem; font-weight: bold; margin-bottom: 12px; color: #1D1E23;">
+            4. 다음과 같이 주장한 사람을 쓰시오.
+          </div>
+          <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-size: 1.3rem; line-height: 1.7;">
+            우리나라가 아시아의 중립국이 된다면 실로 러시아를 방어하는 큰 기틀이자 아시아의 여러 대국이 서로 보전하는 정략이 될 수 있다. …… 오직 중립 한 가지만이 진실로 우리나라를 지키는 방책이다. 그러나 우리가 먼저 제창할 수 없으니 중국에 요청하여 이를 맡아 처리해 주도록 해야 일이다.
+            <div style="margin-top: 15px; text-align: right; font-weight: bold;">
+              정답: <span class="blank" onclick="revealBlank(this, event)" style="min-width: 150px; border-bottom-color: #fff;"><span class="answer-text">유길준</span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- Slide 15: Thank you -->
+    <div class="slide" id="slide15" style="justify-content: center; padding: 0;">
+      <h1 style="font-size: 5rem; color: #2563eb; margin-bottom: 30px;">감사합니다!</h1>
+      <p style="font-size: 2rem; color: #1D1E23;">역사 수업에 열심히 참여해 주셔서 감사합니다.</p>
+      <div class="author-stamp" style="bottom: 50px; right: 50px; border-color: #ef4444; color: #1D1E23;">교생 김찬결</div>
+    </div>
+  </div>
+
+  <div class="controls-left">
+    <button onclick="prevAction(event)" title="이전 (또는 빈칸 되돌리기)">◀</button>
+    <button onclick="nextAction(event)" title="다음 슬라이드">▶</button>
+  </div>
+  <div class="controls-right">
+    <button onclick="prevAction(event)" title="이전 (또는 빈칸 되돌리기)">◀</button>
+    <button onclick="nextAction(event)" title="다음 슬라이드">▶</button>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 15;
+
+    function showSummary(id, event) {
+      if(event) event.stopPropagation();
+      document.getElementById('summary-default').style.display = 'none';
+      document.querySelectorAll('.summary-content').forEach(el => el.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    window.onload = () => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    };
+
+    function updateSlides() {
+      document.querySelectorAll('.slide').forEach((slide, index) => {
+        slide.classList.remove('active');
+        if (index + 1 === currentSlide) {
+          slide.classList.add('active');
+        }
+      });
+      
+      if (currentSlide !== 4) {
+        const video = document.getElementById('intro-video');
+        if (video && !video.paused) {
+          video.pause();
+        }
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlides();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlides();
+      }
+    }
+
+    function prevAction(event) {
+      if (event) event.stopPropagation();
+      const activeSlide = document.querySelector('.slide.active');
+      if (activeSlide) {
+        const revealedBlanks = activeSlide.querySelectorAll('.blank.revealed');
+        if (revealedBlanks.length > 0) {
+          revealedBlanks[revealedBlanks.length - 1].classList.remove('revealed');
+          return;
+        }
+      }
+      prevSlide();
+    }
+
+    function nextAction(event) {
+      if (event) event.stopPropagation();
+      nextSlide();
+    }
+
+    function goToSlide(num, event) {
+      if(event) event.stopPropagation();
+      currentSlide = num;
+      updateSlides();
+    }
+
+    /* ----------------------------------------------------
+       Map Animation Logic (Slide 6)
+       ---------------------------------------------------- */
+    const mapSteps = [
+      // 📝 [좌표 수정하는 방법]
+      // x, y: 최종 도착지 좌표 (가로, 세로 %)
+      // path: 도착지 이전에 거쳐갈 중간 기착지(꺾이는 지점) 좌표들의 배열입니다. 
+      // 예시: path: [{x: 20, y: 50}, {x: 40, y: 50}] 
+      
+      { x: 17, y: 83, title: "❶ 10. 17. 밤", desc: "우정총국에서 정변 시작", color: "#a78bfa" },
+      { path: [{x: 17, y: 70}, {x: 67, y: 70}, {x: 67, y: 48}, {x: 60, y: 48}, {x: 60, y: 59}], x: 41, y: 52, title: "❷ 10. 17. 밤", desc: "고종 경우궁으로 피신", color: "#a78bfa" },
+      { x: 43, y: 62, title: "❸ 10. 18. 오전", desc: "개화당 정부 수립 공포", color: "#a78bfa" },
+      { x: 74, y: 62, title: "❹ 10. 19. 오전", desc: "개혁 정강 발표", color: "#a78bfa" },
+      { path: [{x: 72, y: 38}, {x: 76, y: 13}, {x: 41, y: 13}, {x:41, y:18}, {x: 27, y: 48}], x: 36, y: 76, title: "❺ 10. 19. 오후", desc: "청군 개입, 일본군 후퇴", color: "#ef4444" },
+      { x: 45, y: 104, title: "❻ 10. 20. 오후", desc: "김옥균 등 일본 망명", color: "#94a3b8" }
+    ];
+
+    function playFightSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        for(let i=0; i<3; i++) {
+          setTimeout(() => {
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc1.type = 'square';
+            osc2.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(1500 + Math.random()*500, ctx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
+            osc2.frequency.setValueAtTime(2500 + Math.random()*500, ctx.currentTime);
+            osc2.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.5, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(ctx.destination);
+            osc1.start(); osc2.start();
+            osc1.stop(ctx.currentTime + 0.1); osc2.stop(ctx.currentTime + 0.1);
+          }, i * 150 + Math.random()*50);
+        }
+      } catch(e) {}
+    }
+
+    function showFireEffect(element) {
+      for(let i=0; i<8; i++) {
+        const fire = document.createElement('div');
+        fire.className = 'fire-effect';
+        fire.innerText = '🔥';
+        fire.style.position = 'absolute';
+        fire.style.left = (10 + Math.random() * 80) + '%';
+        fire.style.top = (-20 + Math.random() * 20) + 'px';
+        fire.style.fontSize = (1.5 + Math.random()) + 'rem';
+        fire.style.pointerEvents = 'none';
+        fire.style.animation = `burn ${0.5 + Math.random()*0.5}s infinite alternate`;
+        element.appendChild(fire);
+      }
+    }
+    let currentMapStep = -1;
+    let mapPoints = [];
+    let isMapAnimating = false;
+
+    async function nextMapStep(event) {
+      document.querySelectorAll('.fire-effect').forEach(el => el.remove());
+      if (event) event.stopPropagation();
+      if (currentMapStep >= mapSteps.length - 1 || isMapAnimating) {
+        if (currentMapStep >= mapSteps.length - 1) {
+          document.getElementById('map-worksheet').style.display = 'block';
+        }
+        return; // Reached end or animating
+      }
+      
+      isMapAnimating = true;
+      currentMapStep++;
+      const step = mapSteps[currentMapStep];
+      const marker = document.getElementById('map-marker');
+      
+      marker.style.display = 'block';
+      
+      // 중간 경유지(꺾이는 지점)가 있을 경우 순차적으로 이동
+      if (step.path && step.path.length > 0) {
+        for (let p of step.path) {
+          marker.style.transition = 'all 0.5s linear';
+          marker.style.left = p.x + '%';
+          marker.style.top = p.y + '%';
+          
+          mapPoints.push(`${p.x},${p.y}`);
+          document.getElementById('map-path').setAttribute('points', mapPoints.join(' '));
+          
+          await new Promise(r => setTimeout(r, 500));
+        }
+      }
+      
+      marker.style.transition = 'all 0.8s ease-in-out';
+      marker.style.left = step.x + '%';
+      marker.style.top = step.y + '%';
+      
+      mapPoints.push(`${step.x},${step.y}`);
+      document.getElementById('map-path').setAttribute('points', mapPoints.join(' '));
+      
+      const container = document.getElementById('map-overlay-container');
+      
+      const card = document.createElement('div');
+      card.style.position = 'absolute';
+      card.style.background = 'rgba(255, 255, 255, 0.95)';
+      card.style.color = '#1D1E23';
+      card.style.padding = '12px 18px';
+      card.style.borderRadius = '8px';
+      card.style.border = `2px solid ${step.color}`;
+      card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.6)';
+      card.style.whiteSpace = 'nowrap';
+      card.style.opacity = '0';
+      card.style.transition = 'opacity 0.5s ease-in-out';
+      card.style.zIndex = '30';
+      card.style.minWidth = '220px';
+      
+      card.innerHTML = `<div style="font-size: 1rem; color: ${step.color}; font-weight: bold; margin-bottom: 5px;">${step.title}</div>
+                        <div style="font-size: 1.2rem; font-weight: bold;">${step.desc}</div>`;
+      
+      // 위치 지정 로직 (지도 바깥으로 빼기)
+      // currentMapStep에 따라 좌우 번갈아가며 밖으로 배치하여 겹치지 않게 만듦
+      if (currentMapStep === 0) { card.style.left = '2%'; card.style.top = '10%'; }
+      else if (currentMapStep === 1) { card.style.right = '2%'; card.style.top = '10%'; }
+      else if (currentMapStep === 2) { card.style.left = '2%'; card.style.top = '40%'; }
+      else if (currentMapStep === 3) { card.style.right = '2%'; card.style.top = '40%'; }
+      else if (currentMapStep === 4) { card.style.left = '2%'; card.style.top = '70%'; }
+      else if (currentMapStep === 5) { card.style.right = '2%'; card.style.top = '70%'; }
+      else { card.style.left = '2%'; card.style.top = '10%'; }
+      
+      container.appendChild(card);
+      
+      if (currentMapStep === 0) {
+        playFightSound();
+        showFireEffect(card);
+      } else if (currentMapStep === 4) {
+        playFightSound();
+      }
+      
+      setTimeout(() => {
+        card.style.opacity = '1';
+        isMapAnimating = false;
+      }, 600); 
+    }
+    
+    // 📝 [거문도 확대 좌표 설정]
+    // transformOrigin을 통해 지도의 어느 부분을 중심으로 확대할지 결정합니다.
+    // 기본값은 '30% 85%' (가로 30%, 세로 85% 지점 - 대략 남해안 거문도 위치)
+    // object-fit: contain 속성이므로 이미지 비율에 따라 여백이 있을 경우 중심축 좌표가 다를 수 있습니다. 미세 조정해 주세요.
+    let geomundoZoomOrigin = "49% 82%";
+    let geomundoScale = 12; // 5~6배 확대
+
+    function zoomGeomundo(event) {
+      if(event) event.stopPropagation();
+      const map = document.getElementById('geomundo-map');
+      
+      if (map.style.transform.includes('scale')) {
+        // 원래대로 복구
+        map.style.transform = 'scale(1) translate(0px, 0px)';
+      } else {
+        // 거문도 확대
+        map.style.transformOrigin = geomundoZoomOrigin;
+        map.style.transform = `scale(${geomundoScale})`;
+      }
+    }
+
+    function revealBlank(element, event) {
+      if (event) event.stopPropagation();
+      element.classList.add('revealed');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+        if (e.key === ' ' && currentSlide === 12) return; 
+        e.preventDefault();
+        nextAction();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevAction();
+      }
+    });
+
+    const video = document.getElementById('intro-video');
+    video.addEventListener('play', () => {
+      document.getElementById('slide3').classList.add('dimmed');
+    });
+    video.addEventListener('pause', () => {
+      document.getElementById('slide3').classList.remove('dimmed');
+    });
+    video.addEventListener('ended', () => {
+      document.getElementById('slide3').classList.remove('dimmed');
+    });
+
+    function revealOxAnswer(btn, answer, event) {
+      if (event) event.stopPropagation();
+      btn.innerText = answer;
+      btn.style.background = answer === 'O' ? '#556B2F' : '#A65E44';
+      btn.style.color = '#fff';
+      btn.style.cursor = 'default';
+      btn.onclick = null;
+    }
+
+    let quizCompleted = false;
+    function handleWrongAnswer(element, event) {
+      if (event) event.stopPropagation();
+      if (quizCompleted) return;
+      element.classList.add('fade-out');
+    }
+
+    function handleCorrectAnswer(event) {
+      if (event) event.stopPropagation();
+      if (quizCompleted) return;
+      quizCompleted = true;
+      const correctOption = document.getElementById('correct-option');
+      correctOption.classList.add('correct');
+      
+      const options = document.querySelectorAll('.option:not(#correct-option)');
+      options.forEach(opt => {
+        opt.style.display = 'none';
+      });
+      
+      setTimeout(() => {
+        const feedback = document.getElementById('quiz-feedback');
+        if(feedback) feedback.style.display = 'block';
+      }, 400);
+    }
+
+    /* ----------------------------------------------------
+       Drag and Drop Logic (Pointer Events for Smartboard)
+       ---------------------------------------------------- */
+    let dragElement = null;
+    let dragPlaceholder = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    document.querySelectorAll('.dnd-item').forEach(item => {
+      item.addEventListener('pointerdown', dragStart);
+    });
+
+    function dragStart(e) {
+      // Allow only primary pointer (usually left click or first touch)
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      
+      const item = e.target.closest('.dnd-item');
+      if (!item) return;
+      
+      e.preventDefault(); // Prevent text selection
+      
+      const rect = item.getBoundingClientRect();
+      
+      // Create clone for visual dragging
+      dragElement = item.cloneNode(true);
+      dragElement.classList.add('dragging-clone');
+      dragElement.style.position = 'fixed';
+      dragElement.style.width = `${rect.width}px`;
+      dragElement.style.left = `${rect.left}px`;
+      dragElement.style.top = `${rect.top}px`;
+      document.body.appendChild(dragElement);
+      
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      
+      // Hide original item (acts as placeholder)
+      item.classList.add('invisible');
+      dragPlaceholder = item;
+      
+      document.addEventListener('pointermove', dragMove);
+      document.addEventListener('pointerup', dragEnd);
+      document.addEventListener('pointercancel', dragEnd);
+    }
+
+    function dragMove(e) {
+      if (dragElement) {
+        dragElement.style.left = `${e.clientX - offsetX}px`;
+        dragElement.style.top = `${e.clientY - offsetY}px`;
+      }
+    }
+
+    function dragEnd(e) {
+      document.removeEventListener('pointermove', dragMove);
+      document.removeEventListener('pointerup', dragEnd);
+      document.removeEventListener('pointercancel', dragEnd);
+      
+      if (dragElement && dragPlaceholder) {
+        // Temporarily hide clone to find what's underneath
+        dragElement.style.display = 'none';
+        const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+        
+        const zone = dropTarget ? (dropTarget.closest('.zone-content') || dropTarget.closest('.dnd-zone')) : null;
+        
+        if (zone) {
+          // Dropped inside a zone
+          const targetContent = zone.classList.contains('zone-content') ? zone : zone.querySelector('.zone-content');
+          targetContent.appendChild(dragPlaceholder);
+          dragPlaceholder.classList.remove('invisible');
+        } else {
+          // Dropped outside, return to source
+          document.getElementById('dnd-source').appendChild(dragPlaceholder);
+          dragPlaceholder.classList.remove('invisible');
+        }
+        
+        dragElement.remove();
+        dragElement = null;
+        dragPlaceholder = null;
+      }
+    }
+  </script>
+</body>
+</html>
